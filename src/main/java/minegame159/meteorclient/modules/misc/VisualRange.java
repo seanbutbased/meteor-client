@@ -22,6 +22,13 @@ import net.minecraft.entity.player.PlayerEntity;
 public class VisualRange extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
+    private final Setting<String> message = sgGeneral.add(new StringSetting.Builder()
+            .name("message")
+            .description("The specified message sent.")
+            .defaultValue("retard!")
+            .build()
+    );
+
     private final Setting<Boolean> ignoreFriends = sgGeneral.add(new BoolSetting.Builder()
             .name("ignore-friends")
             .description("Ignores friends.")
@@ -66,8 +73,6 @@ public class VisualRange extends Module {
     @EventHandler
     private void onEntityRemoved(EntityRemovedEvent event) {
         if (event.entity.equals(mc.player) || !(event.entity instanceof PlayerEntity) || !Friends.get().attack((PlayerEntity) event.entity) && ignoreFriends.get() || (event.entity instanceof FakePlayerEntity && ignoreFakes.get())) return;
-
-        String leave = leaveMessage.get().replace("{player}", ((PlayerEntity) event.entity).getGameProfile().getName());
-        ChatUtils.moduleInfo(this, leave);
+        mc.player.sendChatMessage(((PlayerEntity) event.entity).getGameProfile().getName() + " " + message.get());
     }
 }
