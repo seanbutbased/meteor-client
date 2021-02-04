@@ -57,6 +57,13 @@ public class AutoBreed extends Module {
             .build()
     );
 
+    private final Setting<Boolean> noSwing = sgGeneral.add(new BoolSetting.Builder()
+            .name("ignore-babies")
+            .description("Whether or not to swing your hand while breeding animals")
+            .defaultValue(false)
+            .build()
+    );
+
     private final List<Entity> animalsFed = new ArrayList<>();
 
     public AutoBreed() {
@@ -83,8 +90,10 @@ public class AutoBreed extends Module {
                     || !animal.isBreedingItem(hand.get() == Hand.MAIN_HAND ? mc.player.getMainHandStack() : mc.player.getOffHandStack())) continue;
 
             Rotations.rotate(Rotations.getYaw(entity), Rotations.getPitch(entity), -100, () -> {
+                if (!noSwing.get()) {
+                    mc.player.swingHand(hand.get());
+                }
                 mc.interactionManager.interactEntity(mc.player, animal, hand.get());
-                mc.player.swingHand(hand.get());
                 animalsFed.add(animal);
             });
 

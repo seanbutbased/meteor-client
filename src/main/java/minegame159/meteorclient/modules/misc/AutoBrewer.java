@@ -41,7 +41,8 @@ public class AutoBrewer extends Module {
     private final Setting<Modifier> modifier = sgGeneral.add(new EnumSetting.Builder<Modifier>()
             .name("modifier")
             .description("The modifier for the specified potion.")
-            .defaultValue(Modifier.None).build()
+            .defaultValue(Modifier.None)
+            .build()
     );
 
     private int ingredientI;
